@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Yo Soy · Recibo · Gracias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --parchment: #F2EDE4;
+    --beige: #E8DFD0;
+    --gold: #C9A96E;
+    --gold-light: #E8CFA0;
+    --gold-pale: #F5EDD8;
+    --rose: #D9B8B0;
+    --rose-pale: #F0E4E0;
+    --sage: #9EAD9A;
+    --sage-pale: #E8EFE6;
+    --text-dark: #3A3228;
+    --text-mid: #6B5D52;
+    --text-light: #9C8D82;
+    --white: #FFFFFF;
+    --shadow: rgba(58, 50, 40, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SCREENS ── */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    padding-bottom: 90px;
+    animation: fadeIn 0.5s ease;
+  }
+  .screen.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--white);
+    border-top: 1px solid var(--beige);
+    display: flex;
+    z-index: 100;
+    padding: 0 4px;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 4px 8px;
+    gap: 3px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    font-family: 'Jost', sans-serif;
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+
+  .nav-btn.active { color: var(--gold); }
+
+  .nav-btn svg {
+    width: 20px; height: 20px;
+    stroke-width: 1.2;
+  }
+
+  .nav-dot {
+    position: absolute;
+    top: 6px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .nav-btn.active .nav-dot { opacity: 1; }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    padding: 52px 28px 24px;
+    position: relative;
+  }
+
+  .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 28px; right: 28px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+  }
+
+  .page-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 300;
+    margin-bottom: 6px;
+  }
+
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--text-dark);
+    line-height: 1.1;
+    font-style: italic;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    margin: 20px 20px 0;
+    background: var(--white);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 2px 16px var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-gold::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold-light), var(--gold), var(--gold-light));
+  }
+
+  .card-rose::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--rose-pale), var(--rose), var(--rose-pale));
+  }
+
+  .card-sage::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--sage-pale), var(--sage), var(--sage-pale));
+  }
+
+  .card-label {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 300;
+    margin-bottom: 14px;
+  }
+
+  .card-label.rose { color: var(--rose); }
+  .card-label.sage { color: var(--sage); }
+
+  /* ── AFFIRMATION LIST ── */
+  .affirmation-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--parchment);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .affirmation-item:last-of-type { border-bottom: none; }
+
+  .affirmation-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold-light);
+    margin-top: 6px;
+    flex-shrink: 0;
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .affirmation-item.done .affirmation-dot {
+    background: var(--gold);
+    transform: scale(1.4);
+  }
+
+  .affirmation-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-mid);
+    line-height: 1.4;
+    transition: color 0.3s;
+  }
+
+  .affirmation-item.done .affirmation-text {
+    color: var(--text-dark);
+  }
+
+  /* ── DECRETO ── */
+  .decreto-box {
+    background: linear-gradient(135deg, var(--gold-pale), var(--cream));
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 16px;
+    border: 1px solid var(--gold-light);
+    position: relative;
+  }
+
+  .decreto-box::before {
+    content: '✦';
+    position: absolute;
+    top: -9px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold-pale);
+    color: var(--gold);
+    font-size: 12px;
+    padding: 0 8px;
+    letter-spacing: 2px;
+  }
+
+  .decreto-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-mid);
+    line-height: 1.8;
+    text-align: center;
+  }
+
+  .decreto-rose { background: linear-gradient(135deg, var(--rose-pale), var(--cream)); border-color: var(--rose); }
+  .decreto-rose::before { background: var(--rose-pale); color: var(--rose); }
+
+  .decreto-sage { background: linear-gradient(135deg, var(--sage-pale), var(--cream)); border-color: var(--sage); }
+  .decreto-sage::before { background: var(--sage-pale); color: var(--sage); }
+
+  /* ── BUTTONS ── */
+  .btn-complete {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: var(--white);
+  }
+
+  .btn-complete:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .btn-complete.done {
+    background: var(--parchment);
+    color: var(--gold);
+    border: 1px solid var(--gold-light);
+  }
+
+  .btn-complete.rose-btn {
+    background: linear-gradient(135deg, var(--rose), #C8918A);
+  }
+
+  .btn-complete.sage-btn {
+    background: linear-gradient(135deg, var(--sage), #7A9975);
+  }
+
+  .btn-reset {
+    width: 100%;
+    margin-top: 12px;
+    padding: 13px;
+    border: 1px solid var(--rose);
+    border-radius: 50px;
+    background: transparent;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rose);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-reset:hover { background: var(--rose-pale); }
+
+  /* ── RESET MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(58, 50, 40, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
+
+  .modal-box {
+    background: var(--white);
+    border-radius: 24px 24px 14px 14px;
+    padding: 32px 24px 24px;
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: var(--parchment);
+    border: none;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--text-light);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .modal-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 16px;
+  }
+
+  .modal-decreto {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-mid);
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  /* ── TEXTAREA AGRADECIMIENTOS ── */
+  .gratitude-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+
+  .gratitude-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .gratitude-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--gold-light);
+    width: 18px;
+    flex-shrink: 0;
+  }
+
+  .gratitude-input {
+    flex: 1;
+    border: none;
+    border-bottom: 1px solid var(--beige);
+    background: transparent;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--text-dark);
+    padding: 6px 0;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+  }
+
+  .gratitude-input::placeholder { color: var(--beige); }
+  .gratitude-input:focus { border-color: var(--gold); }
+
+  /* ── HOME SCREEN ── */
+  #screen-home {
+    background: var(--cream);
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  #screen-home.active { display: flex; }
+
+  .home-hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 32px 32px;
+    text-align: center;
+    position: relative;
+  }
+
+  .home-ornament {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  .home-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 13vw;
+    line-height: 1;
+    color: var(--text-dark);
+  }
+
+  @media (min-width: 400px) { .home-title { font-size: 52px; } }
+
+  .home-title span {
+    display: block;
+    font-style: italic;
+  }
+
+  .home-title .word-gold { color: var(--gold); }
+
+  .home-dots {
+    display: flex;
+    gap: 8px;
+    margin: 24px 0;
+    justify-content: center;
+  }
+
+  .home-dots span {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--gold-light);
+  }
+
+  .home-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-style: italic;
+    color: var(--text-mid);
+    line-height: 1.6;
+    max-width: 280px;
+    margin-bottom: 40px;
+  }
+
+  .home-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 0 20px 20px;
+    width: 100%;
+  }
+
+  .home-ritual-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 16px 10px;
+    text-align: center;
+    box-shadow: 0 2px 12px var(--shadow);
+    cursor: pointer;
+    transition: all 0.25s;
+    border: 1px solid transparent;
+  }
+
+  .home-ritual-card:hover { transform: translateY(-2px); border-color: var(--gold-light); }
+
+  .home-ritual-icon { font-size: 20px; margin-bottom: 6px; }
+
+  .home-ritual-label {
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    font-weight: 300;
+  }
+
+  .home-ritual-status {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--beige);
+    margin: 6px auto 0;
+    transition: background 0.4s;
+  }
+
+  .home-ritual-status.done { background: var(--gold); }
+
+  /* ── PROGRESS SCREEN ── */
+  .progress-hero {
+    padding: 52px 28px 28px;
+    text-align: center;
+    background: linear-gradient(180deg, var(--parchment), var(--cream));
+    position: relative;
+  }
+
+  .progress-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 28px; right: 28px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+  }
+
+  .progress-day {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--gold);
+  }
+
+  .progress-day-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 20px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 16px 20px;
+  }
+
+  .stat-box {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--text-dark);
+    line-height: 1;
+  }
+
+  .stat-number.gold { color: var(--gold); }
+  .stat-number.rose { color: var(--rose); }
+
+  .stat-label {
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-top: 4px;
+  }
+
+  /* Progress bar */
+  .progress-bar-wrap {
+    margin: 0 20px 0;
+    background: var(--parchment);
+    border-radius: 50px;
+    height: 6px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--gold-light), var(--gold));
+    transition: width 1s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .progress-bar-label {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 20px 0;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--text-light);
+  }
+
+  /* Calendar grid */
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 5px;
+    padding: 16px;
+  }
+
+  .cal-day {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    background: var(--parchment);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7px;
+    color: var(--text-light);
+    font-weight: 300;
+    transition: background 0.3s;
+  }
+
+  .cal-day.completed { background: var(--gold); color: var(--white); }
+  .cal-day.today { border: 1.5px solid var(--gold); background: var(--gold-pale); color: var(--gold); }
+
+  /* ── FE Y CONFIANZA ── */
+  .fe-hero {
+    padding: 52px 28px 32px;
+    text-align: center;
+    background: linear-gradient(180deg, var(--sage-pale), var(--cream));
+    position: relative;
+  }
+
+  .fe-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 28px; right: 28px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--sage), transparent);
+  }
+
+  .fe-symbol {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .fe-decreto {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-mid);
+    line-height: 2;
+    text-align: center;
+  }
+
+  .fe-closing {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    font-weight: 400;
+    color: var(--sage);
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  /* ── UTILITIES ── */
+  .spacer { height: 16px; }
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--beige), transparent);
+    margin: 16px 20px;
+  }
+
+  /* Scroll */
+  .screen { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Completed check animation */
+  @keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .check-anim { animation: popIn 0.4s ease forwards; }
+
+  /* Floating quote on home */
+  .home-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text-light);
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* DIA screen pill tags */
+  .pill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .pill {
+    padding: 6px 14px;
+    border-radius: 50px;
+    background: var(--parchment);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--text-mid);
+    border: 1px solid var(--beige);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .pill:hover { background: var(--gold-pale); border-color: var(--gold-light); }
+  .pill.active { background: var(--gold-pale); border-color: var(--gold); color: var(--text-dark); }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%; transform: translateX(-50%);
+    background: var(--text-dark);
+    color: var(--cream);
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    z-index: 500;
+    opacity: 0;
+    transition: opacity 0.4s;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: INICIO
+══════════════════════════════════════════ -->
+<div id="screen-home" class="screen active">
+  <div class="home-hero">
+    <p class="home-ornament">✦ &nbsp; ritual diario de abundancia &nbsp; ✦</p>
+
+    <div class="home-title">
+      <span>Yo Soy</span>
+      <span class="word-gold">Recibo</span>
+      <span>Gracias</span>
+    </div>
+
+    <div class="home-dots">
+      <span></span><span></span><span></span>
+    </div>
+
+    <p class="home-subtitle">
+      Cada decreto que pronuncias es una semilla de abundancia que el universo recoge.
+    </p>
+  </div>
+
+  <div class="home-cards">
+    <div class="home-ritual-card" onclick="goTo('screen-manana')">
+      <div class="home-ritual-icon">☀️</div>
+      <div class="home-ritual-label">Mañana</div>
+      <div class="home-ritual-status" id="status-manana"></div>
+    </div>
+    <div class="home-ritual-card" onclick="goTo('screen-dia')">
+      <div class="home-ritual-icon">🌿</div>
+      <div class="home-ritual-label">Día</div>
+      <div class="home-ritual-status" id="status-dia"></div>
+    </div>
+    <div class="home-ritual-card" onclick="goTo('screen-noche')">
+      <div class="home-ritual-icon">🌙</div>
+      <div class="home-ritual-label">Noche</div>
+      <div class="home-ritual-status" id="status-noche"></div>
+    </div>
+  </div>
+
+  <p class="home-quote" style="text-align:center; padding-bottom:24px;">Hoy es el día perfecto para recibir.</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: MAÑANA
+══════════════════════════════════════════ -->
+<div id="screen-manana" class="screen">
+  <div class="page-header">
+    <p class="page-eyebrow">☀️ &nbsp; ritual de mañana</p>
+    <h1 class="page-title">Despertar<br>en abundancia</h1>
+  </div>
+
+  <div class="card card-gold">
+    <p class="card-label">Afirmaciones de apertura</p>
+    <div id="manana-afirmaciones">
+      <div class="affirmation-item" onclick="toggleAffirmation(this)">
+        <div class="affirmation-dot"></div>
+        <p class="affirmation-text">Yo soy abundancia divina.</p>
+      </div>
+      <div class="affirmation-item" onclick="toggleAffirmation(this)">
+        <div class="affirmation-dot"></div>
+        <p class="affirmation-text">Yo soy prosperidad infinita.</p>
+      </div>
+      <div class="affirmation-item" onclick="toggleAffirmation(this)">
+        <div class="affirmation-dot"></div>
+        <p class="affirmation-text">Yo soy la puerta abierta que nadie puede cerrar.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-label">Decreto de mañana</p>
+    <div class="decreto-box">
+      <p class="decreto-text">
+        Yo soy la abundancia infinita del universo manifestándose en forma humana.<br><br>
+        Recibo con los brazos abiertos y el corazón agradecido toda la prosperidad que fluye hacia mí desde todas las direcciones.<br><br>
+        Gracias por todas las bendiciones que ya están en camino hacia mí, por las puertas que se abren, por las oportunidades que aparecen y por el dinero que fluye abundantemente hacia mi vida.
+      </p>
+    </div>
+    <button class="btn-complete" id="btn-manana" onclick="completeRitual('manana')">
+      Marcar ritual completado
+    </button>
+  </div>
+
+  <div class="spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: DÍA
+══════════════════════════════════════════ -->
+<div id="screen-dia" class="screen">
+  <div class="page-header">
+    <p class="page-eyebrow">🌿 &nbsp; durante el día</p>
+    <h1 class="page-title">Ancla la<br>abundancia</h1>
+  </div>
+
+  <div class="card card-rose">
+    <p class="card-label rose">Frases de activación</p>
+    <p style="font-size:11px; color:var(--text-light); letter-spacing:0.08em; margin-bottom:14px;">Toca las que necesites en este momento</p>
+    <div class="pill-tags">
+      <div class="pill" onclick="this.classList.toggle('active')">Yo soy abundancia.</div>
+      <div class="pill" onclick="this.classList.toggle('active')">Recibo la solución perfecta.</div>
+      <div class="pill" onclick="this.classList.toggle('active')">Gracias porque ya está resuelto.</div>
+      <div class="pill" onclick="this.classList.toggle('active')">Yo soy, recibo, gracias.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-label rose">¿Necesitas un reset energético?</p>
+    <p style="font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--text-light); font-size:15px; line-height:1.5; margin-bottom:4px;">
+      Cancela toda palabra de escasez y vuelve a tu centro de abundancia.
+    </p>
+    <button class="btn-reset" onclick="openModal()">
+      ✦ &nbsp; Necesito un reset
+    </button>
+  </div>
+
+  <div class="spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: NOCHE
+══════════════════════════════════════════ -->
+<div id="screen-noche" class="screen">
+  <div class="page-header">
+    <p class="page-eyebrow">🌙 &nbsp; ritual de noche</p>
+    <h1 class="page-title">Cerrar el día<br>con gratitud</h1>
+  </div>
+
+  <div class="card card-rose">
+    <p class="card-label rose">Mis 5 agradecimientos de hoy</p>
+    <div class="gratitude-list" id="gratitude-list">
+      <div class="gratitude-row"><span class="gratitude-num">1</span><input class="gratitude-input" type="text" placeholder="Hoy agradezco…" oninput="saveGratitude()" /></div>
+      <div class="gratitude-row"><span class="gratitude-num">2</span><input class="gratitude-input" type="text" placeholder="Hoy agradezco…" oninput="saveGratitude()" /></div>
+      <div class="gratitude-row"><span class="gratitude-num">3</span><input class="gratitude-input" type="text" placeholder="Hoy agradezco…" oninput="saveGratitude()" /></div>
+      <div class="gratitude-row"><span class="gratitude-num">4</span><input class="gratitude-input" type="text" placeholder="Hoy agradezco…" oninput="saveGratitude()" /></div>
+      <div class="gratitude-row"><span class="gratitude-num">5</span><input class="gratitude-input" type="text" placeholder="Hoy agradezco…" oninput="saveGratitude()" /></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-label">Decreto nocturno</p>
+    <div class="decreto-box decreto-rose">
+      <p class="decreto-text">
+        Gracias por este día de bendiciones.<br><br>
+        Yo soy abundancia mientras duermo.<br>
+        Recibo prosperidad incluso en mis sueños.<br><br>
+        Mañana despierto a un nuevo nivel de abundancia.<br><br>
+        <strong style="font-style:normal; color:var(--text-dark); font-weight:400;">Así es. Hecho está.</strong>
+      </p>
+    </div>
+    <button class="btn-complete rose-btn" id="btn-noche" onclick="completeRitual('noche')">
+      Cerrar el día con gratitud
+    </button>
+  </div>
+
+  <div class="spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: FE Y CONFIANZA
+══════════════════════════════════════════ -->
+<div id="screen-fe" class="screen">
+  <div class="fe-hero">
+    <span class="fe-symbol">✦</span>
+    <p class="page-eyebrow" style="color:var(--sage);">decreto de fe absoluta</p>
+    <h1 class="page-title">Fe &amp;<br>Confianza</h1>
+  </div>
+
+  <div class="card card-sage" style="margin-top:24px;">
+    <p class="card-label sage">Mi fe es inquebrantable</p>
+    <div class="decreto-box decreto-sage">
+      <p class="decreto-text">
+        Aunque mis ojos físicos aún no vean la abundancia completa manifestada, yo sé que está ocurriendo en el plano espiritual.<br><br>
+        Recibo cada día señales de que mi prosperidad está en camino.<br><br>
+        Gracias porque confío perfectamente en el tiempo divino.
+      </p>
+    </div>
+    <div class="fe-closing" style="margin-top:20px;">
+      Mi fe es inquebrantable.<br>
+      Mi decreto es irrevocable.<br>
+      Mi manifestación es inevitable.
+    </div>
+    <div style="text-align:center; margin-top:16px; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:18px; color:var(--sage); letter-spacing:0.05em;">
+      Así es y así será.
+    </div>
+    <button class="btn-complete sage-btn" style="margin-top:24px;" onclick="showToast('Tu fe ha sido declarada ✦')">
+      Declarar mi fe hoy
+    </button>
+  </div>
+
+  <div class="spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: PROGRESO
+══════════════════════════════════════════ -->
+<div id="screen-progreso" class="screen">
+  <div class="progress-hero">
+    <p class="progress-day-label" style="margin-bottom:4px;">día del reto</p>
+    <div class="progress-day" id="reto-day">—</div>
+    <p style="font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-light);">de 90 días</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-number gold" id="stat-racha">0</div>
+      <div class="stat-label">Racha actual</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number rose" id="stat-pct">0%</div>
+      <div class="stat-label">Cumplimiento</div>
+    </div>
+  </div>
+
+  <div class="progress-bar-label">
+    <span>Inicio del reto</span>
+    <span id="pct-label">0 / 90 días</span>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <p class="card-label">Calendario del reto — 90 días</p>
+    <div class="calendar-grid" id="calendar-grid"></div>
+  </div>
+
+  <div class="card" style="margin-top:0; margin-bottom:8px; text-align:center;">
+    <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px; color:var(--text-mid); line-height:1.6;">
+      Cada día que decretas es un ladrillo de oro<br>en la casa de tu abundancia.
+    </p>
+    <button class="btn-complete" style="margin-top:16px;" onclick="resetReto()">
+      Reiniciar reto de 90 días
+    </button>
+  </div>
+
+  <div class="spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     BOTTOM NAV
+══════════════════════════════════════════ -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="goTo('screen-home')" id="nav-home">
+    <div class="nav-dot"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Inicio
+  </button>
+  <button class="nav-btn" onclick="goTo('screen-manana')" id="nav-manana">
+    <div class="nav-dot"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    Mañana
+  </button>
+  <button class="nav-btn" onclick="goTo('screen-dia')" id="nav-dia">
+    <div class="nav-dot"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Día
+  </button>
+  <button class="nav-btn" onclick="goTo('screen-noche')" id="nav-noche">
+    <div class="nav-dot"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    Noche
+  </button>
+  <button class="nav-btn" onclick="goTo('screen-fe')" id="nav-fe">
+    <div class="nav-dot"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    Fe
+  </button>
+  <button class="nav-btn" onclick="goTo('screen-progreso')" id="nav-progreso">
+    <div class="nav-dot"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Progreso
+  </button>
+</nav>
+
+<!-- MODAL RESET -->
+<div class="modal-overlay" id="reset-modal" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <p class="modal-label">✦ &nbsp; decreto de liberación &nbsp; ✦</p>
+    <p class="modal-decreto">
+      Cancelo y anulo toda palabra de escasez, pobreza y limitación que haya pronunciado en el pasado.<br><br>
+      Rompo toda maldición verbal que yo misma he declarado sobre mi vida financiera.<br><br>
+      Borro de mi campo energético todo decreto de carencia que haya emitido consciente o inconscientemente.<br><br>
+      Yo soy libre de todas esas ataduras ahora mismo.
+    </p>
+    <button class="btn-complete" onclick="closeModal(); showToast('Liberación decretada. Eres libre. ✦')">
+      Declarar mi liberación
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+const TODAY = new Date().toDateString();
+let state = JSON.parse(localStorage.getItem('ysrg_state') || '{}');
+
+function saveState() {
+  localStorage.setItem('ysrg_state', JSON.stringify(state));
+}
+
+// ── NAVIGATION ──
+const screens = ['screen-home','screen-manana','screen-dia','screen-noche','screen-fe','screen-progreso'];
+const navIds  = ['nav-home','nav-manana','nav-dia','nav-noche','nav-fe','nav-progreso'];
+
+function goTo(id) {
+  screens.forEach(s => document.getElementById(s).classList.remove('active'));
+  navIds.forEach(n => document.getElementById(n).classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const idx = screens.indexOf(id);
+  if (idx >= 0) document.getElementById(navIds[idx]).classList.add('active');
+  window.scrollTo(0, 0);
+  if (id === 'screen-progreso') renderProgress();
+  updateHomeStatus();
+}
+
+// ── AFFIRMATIONS ──
+function toggleAffirmation(el) {
+  el.classList.toggle('done');
+}
+
+// ── COMPLETE RITUAL ──
+function completeRitual(which) {
+  const btn = document.getElementById('btn-' + which);
+  const today = TODAY;
+
+  if (!state.completed) state.completed = {};
+  if (!state.completed[today]) state.completed[today] = {};
+
+  state.completed[today][which] = true;
+
+  // Update reto
+  if (!state.retoStart) state.retoStart = today;
+  saveState();
+
+  btn.textContent = '✦ Completado · Gracias';
+  btn.classList.add('done');
+  updateHomeStatus();
+  showToast('Ritual completado. El universo escucha. ✦');
+}
+
+// ── GRATITUDE ──
+function saveGratitude() {
+  const inputs = document.querySelectorAll('.gratitude-input');
+  const vals = Array.from(inputs).map(i => i.value);
+  if (!state.gratitude) state.gratitude = {};
+  state.gratitude[TODAY] = vals;
+  saveState();
+}
+
+function loadGratitude() {
+  if (!state.gratitude || !state.gratitude[TODAY]) return;
+  const inputs = document.querySelectorAll('.gratitude-input');
+  state.gratitude[TODAY].forEach((v, i) => { if (inputs[i]) inputs[i].value = v; });
+}
+
+// ── MODAL ──
+function openModal() {
+  document.getElementById('reset-modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('reset-modal').classList.remove('open');
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('reset-modal')) closeModal();
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── HOME STATUS ──
+function updateHomeStatus() {
+  ['manana','dia','noche'].forEach(w => {
+    const el = document.getElementById('status-' + w);
+    if (!el) return;
+    const done = state.completed && state.completed[TODAY] && state.completed[TODAY][w];
+    el.classList.toggle('done', !!done);
+  });
+
+  // Restore button states
+  ['manana','noche'].forEach(w => {
+    const btn = document.getElementById('btn-' + w);
+    if (!btn) return;
+    const done = state.completed && state.completed[TODAY] && state.completed[TODAY][w];
+    if (done) { btn.textContent = '✦ Completado · Gracias'; btn.classList.add('done'); }
+  });
+}
+
+// ── PROGRESS ──
+function renderProgress() {
+  const completed = state.completed || {};
+  const days = Object.keys(completed).filter(d => {
+    const c = completed[d];
+    return c.manana && c.noche;
+  });
+
+  const total = days.length;
+  const start = state.retoStart ? new Date(state.retoStart) : new Date();
+  const now = new Date();
+  const elapsed = Math.max(1, Math.ceil((now - start) / 86400000) + 1);
+  const dayNum = Math.min(elapsed, 90);
+  const pct = Math.round((total / 90) * 100);
+
+  // Racha
+  let racha = 0;
+  const today = new Date(); today.setHours(0,0,0,0);
+  for (let i = 0; i < 90; i++) {
+    const d = new Date(today); d.setDate(d.getDate() - i);
+    const key = d.toDateString();
+    if (completed[key] && completed[key].manana && completed[key].noche) racha++;
+    else break;
+  }
+
+  document.getElementById('reto-day').textContent = dayNum;
+  document.getElementById('stat-racha').textContent = racha;
+  document.getElementById('stat-pct').textContent = pct + '%';
+  document.getElementById('pct-label').textContent = total + ' / 90 días';
+  document.getElementById('progress-fill').style.width = Math.min(pct, 100) + '%';
+
+  // Calendar
+  const grid = document.getElementById('calendar-grid');
+  grid.innerHTML = '';
+  const retoStart = state.retoStart ? new Date(state.retoStart) : new Date();
+  retoStart.setHours(0,0,0,0);
+  const todayStr = new Date().toDateString();
+
+  for (let i = 0; i < 90; i++) {
+    const d = new Date(retoStart); d.setDate(d.getDate() + i);
+    const key = d.toDateString();
+    const div = document.createElement('div');
+    div.className = 'cal-day';
+    div.textContent = i + 1;
+    if (completed[key] && completed[key].manana && completed[key].noche) div.classList.add('completed');
+    else if (key === todayStr) div.classList.add('today');
+    grid.appendChild(div);
+  }
+}
+
+function resetReto() {
+  if (!confirm('¿Reiniciar el reto de 90 días? Se borrará el progreso guardado.')) return;
+  state.retoStart = TODAY;
+  state.completed = {};
+  saveState();
+  renderProgress();
+  updateHomeStatus();
+  showToast('Reto reiniciado. ¡Nuevo comienzo! ✦');
+}
+
+// ── INIT ──
+loadGratitude();
+updateHomeStatus();
+</script>
+</body>
+</html>
